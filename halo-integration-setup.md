@@ -1,12 +1,12 @@
 # HaloPSA
 
 Setting up this integration allows you to
-1. Deploy Software to machines covered by a certain contract type 
+1. Deploy Software to machines covered by a certain contract type
   - Example: Deploy Huntress to all customers with a Managed Security Contract
 1. (Preferred) Deploy Software to machines covered by an Contract with a specific recurring invoice item
   - Example: Deploy SentinelOne to all computers that have SentinelOne on a recurring invoice as a recurring invoice item on their contract
 
-## Create an ImmyBot Application under /config/integrations/api/applications 
+## Create an ImmyBot Application under /config/integrations/api/applications
 
 - Under the details section, select the Client ID and Secret Authentication Method
 - Generate and copy the Client ID and Client Secret
@@ -20,6 +20,7 @@ Setting up this integration allows you to
 - edit:items -> Yes (*should not be needed > 2.99, API bug will not allow listing items without edit rights)
 - read:invoices -> Yes
 - read:software -> Yes
+- edit:reporting -> Yes
 - read:assets -> Yes (*future feature of the integration will include asset population, not currently necessary)
 - edit:assets -> Yes (*future feature of the integration will include asset population, not currently necessary)
 
