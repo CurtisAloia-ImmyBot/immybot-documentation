@@ -130,14 +130,21 @@ Your script path can be found under Settings->Preferences->Script Path
 ![image](https://user-images.githubusercontent.com/1424395/173610304-50bab775-c7c8-40b3-944e-fab1dde862ee.png)
 
 
-* [ThreatLocker](#threatlocker)
-* [Sophos Central](#sophoscentral)
-* [BitDefender](#bitdefender)
-* [CrowdStrike](#crowdstrike)
-* [Microsoft Defender for Endpoint](#microsoft-defender-for-endpoint)
-* [Cylance](#cylance)
-* [SentinelOne](#sentinelone)
-* [DNSFilter](#dnsfilter)
+- [Troubleshooting](#troubleshooting)
+  - [Identification Failures](#identification-failures)
+    - [Needs a Manual Decision](#needs-a-manual-decision)
+  - [Pending Computers](#pending-computers)
+  - [Security Software Exclusions](#security-software-exclusions)
+    - [ThreatLocker](#threatlocker)
+    - [Sophos Central](#sophos-central)
+    - [BitDefender](#bitdefender)
+    - [CrowdStrike](#crowdstrike)
+    - [Microsoft Defender for Endpoint](#microsoft-defender-for-endpoint)
+    - [Cylance](#cylance)
+    - [SentinelOne](#sentinelone)
+    - [DNSFilter](#dnsfilter)
+    - [Group Policy Objects](#group-policy-objects)
+    - [Gather an Event Tracelog](#gather-an-event-tracelog)
 
 ### ThreatLocker
 
@@ -221,11 +228,11 @@ You can also set your Exclusion Mode to "Interoperability - Extended".
 
 ### DNSFilter
 
-There have been reports indicating that DNSFilter, along with potentially other DNS filtering tools, is not directly blocking subdomain.immy.bot but has failed to resolve some DNS queries. 
+There have been reports indicating that DNSFilter, along with potentially other DNS filtering tools, is not directly blocking subdomain.immy.bot but has failed to resolve some DNS queries.
 
-Specifically, in the case of DNSFilter, it was confirmed that ImmyBot was not being blocked. However, the failure in DNS resolution meant that connection attempts to the backend were unsuccessful. 
+Specifically, in the case of DNSFilter, it was confirmed that ImmyBot was not being blocked. However, the failure in DNS resolution meant that connection attempts to the backend were unsuccessful.
 
-Explicitly allowing the DNS for subdomain.immy.bot (replacing "subdomain" with your specific ImmyBot instance subdomain) was verified to resolve the issue of failed DNS resolutions. 
+Explicitly allowing the DNS for subdomain.immy.bot (replacing "subdomain" with your specific ImmyBot instance subdomain) was verified to resolve the issue of failed DNS resolutions.
 
 For guidance on managing allow and block lists, please refer to: https://help.dnsfilter.com/hc/en-us/articles/1500008111381-Allow-and-Block-Lists
 
@@ -236,3 +243,21 @@ Computer Configuration | Policies | Administrative Templates | Windows Component
 User Configuration | Policies | Administrative Templates | Windows Components | Windows PowerShell | Turn on Script Execution (Enabled)
 
 These GPOs have been known to cause issues with running scripts.
+
+### Gather an Event Tracelog
+
+This can take 2-4GB of available RAM to accomplish. It utilizes the built-in sources from Windows WPR that should be available in any endpoint, but both WPR and WPA can be installed from the Windows ADK.
+
+Use these steps to gather an .etl file to review in Windows WPA:
+
+1. From an elevated CMD prompt, run:
+```
+wpr -start CPU -start Minifilter -start FileIO -start Registry
+```
+2. Recreate the issue the agent is experiencing.
+
+3. Wait 3-5 minutes, depending on the available RAM and run:
+```
+wpr -stop c:\PerfLogs\examplefilename.etl -compress
+```
+If you have any issues ending the process, tou can run without -compress.
